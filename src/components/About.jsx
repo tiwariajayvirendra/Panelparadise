@@ -93,6 +93,7 @@ const About = () => {
   };
 
   const contactInfo = {
+    founder:'Founder & CEO  -    Nikhil Singh',
     address: 'B-111, Vishwakarma Colony, Nr. Sab Ki Rasoi, Pul Prahladpur, Delhi - 110044',
     phone: '7048308107 , 011-45510542',
     email: 'nikhil.singh@panelparadise.com',
@@ -142,6 +143,11 @@ const About = () => {
               Contact Information
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <LocationIcon color="primary" />
+                <Typography>{contactInfo.founder}</Typography>
+              </Box>
+
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <LocationIcon color="primary" />
                 <Typography>{contactInfo.address}</Typography>

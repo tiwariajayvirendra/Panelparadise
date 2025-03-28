@@ -6,7 +6,6 @@ import {
   Typography,
   Button,
   IconButton,
-  Badge,
   Menu,
   MenuItem,
   Box,
@@ -15,10 +14,10 @@ import {
   styled,
   alpha,
   useTheme,
-  useMediaQuery
+  useMediaQuery,
+  ListItemIcon
 } from '@mui/material';
 import {
-  ShoppingCart as CartIcon,
   Search as SearchIcon,
   Person as PersonIcon,
   Menu as MenuIcon,
@@ -29,9 +28,10 @@ import { useAuth } from '../context/AuthContext';
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  backgroundColor: '#ffffff',
   '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
+    backgroundColor: '#ffffff',
+    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
   },
   marginRight: theme.spacing(2),
   marginLeft: 0,
@@ -39,6 +39,17 @@ const Search = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('sm')]: {
     marginLeft: theme.spacing(3),
     width: 'auto',
+  },
+  '& .MuiInputBase-root': {
+    color: '#2c3e50',
+    '& .MuiInputBase-input': {
+      '&::placeholder': {
+        color: 'rgba(44, 62, 80, 0.7)',
+      },
+    },
+  },
+  '& .MuiSvgIcon-root': {
+    color: '#2c3e50',
   },
 }));
 
@@ -53,7 +64,7 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
+  color: '#2c3e50',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
@@ -101,11 +112,33 @@ const Navbar = () => {
       ];
 
   return (
-    <AppBar position="fixed" sx={{ 
-      backgroundColor: '#A890FE',
-      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-      zIndex: (theme) => theme.zIndex.drawer + 1
-    }}>
+    <AppBar 
+      position="sticky" 
+      sx={{ 
+        backgroundColor: '#8A9A9E',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+        '& .MuiButton-root': {
+          color: '#FFFFF',
+          '&:hover': {
+            backgroundColor: 'rgba(44, 62, 80, 0.1)',
+          },
+        },
+        '& .MuiInputBase-root': {
+          color: '#FFFFF',
+          '& .MuiInputBase-input': {
+            '&::placeholder': {
+              color: 'rgba(44, 62, 80, 0.7)',
+            },
+          },
+        },
+        '& .MuiIconButton-root': {
+          color: '#2c3e50',
+        },
+        '& .MuiTypography-root': {
+          color: '#2c3e50',
+        },
+      }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -114,10 +147,13 @@ const Navbar = () => {
             to="/"
             sx={{
               flexGrow: { xs: 0, sm: 1 },
-              color: 'inherit',
+              color: '#2c3e50',
               textDecoration: 'none',
               fontWeight: 700,
               display: 'block',
+              '&:hover': {
+                color: '#FFFFFF',
+              },
             }}
           >
             Panel Paradise
@@ -142,31 +178,44 @@ const Navbar = () => {
                 color="inherit"
                 aria-label="menu"
                 onClick={handleMobileMenuOpen}
+                sx={{ ml: 2 }}
               >
                 <MenuIcon />
               </IconButton>
               <Menu
                 anchorEl={mobileMenuAnchor}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
                 open={Boolean(mobileMenuAnchor)}
                 onClose={handleMenuClose}
+                PaperProps={{
+                  sx: {
+                    backgroundColor: '#9FE2BF',
+                    '& .MuiMenuItem-root': {
+                      color: '#2c3e50',
+                      '&:hover': {
+                        backgroundColor: 'rgba(44, 62, 80, 0.1)',
+                      },
+                    },
+                  },
+                }}
               >
-                {[...menuItems, ...authMenuItems].map((item) => (
+                {menuItems.map((item) => (
+                  <MenuItem
+                    key={item.text}
+                    component={RouterLink}
+                    to={item.path}
+                    onClick={handleMenuClose}
+                  >
+                    {item.text}
+                  </MenuItem>
+                ))}
+                {authMenuItems.map((item) => (
                   <MenuItem
                     key={item.text}
                     component={item.onClick ? 'div' : RouterLink}
                     to={item.path}
                     onClick={item.onClick || handleMenuClose}
                   >
-                    {item.icon && <Box component="span" sx={{ mr: 1 }}>{item.icon}</Box>}
+                    {item.icon && <ListItemIcon>{item.icon}</ListItemIcon>}
                     {item.text}
                   </MenuItem>
                 ))}
@@ -198,12 +247,6 @@ const Navbar = () => {
               ))}
             </Box>
           )}
-
-          <IconButton color="inherit" sx={{ ml: 2 }}>
-            <Badge badgeContent={4} color="error">
-              <CartIcon />
-            </Badge>
-          </IconButton>
         </Toolbar>
       </Container>
     </AppBar>

@@ -127,6 +127,7 @@ const TitleBox = styled(Box)(({ theme }) => ({
   animation: 'fadeIn 1s ease-in',
   position: 'relative',
   zIndex: 1,
+  padding: theme.spacing(0, 2),
   '&::after': {
     content: '""',
     display: 'block',
@@ -154,6 +155,10 @@ const ProductsGrid = styled(Grid)(({ theme }) => ({
   margin: '0 auto',
   position: 'relative',
   zIndex: 1,
+  padding: theme.spacing(0, 2),
+  [theme.breakpoints.down('sm')]: {
+    padding: theme.spacing(0, 1),
+  },
   '& .MuiGrid-item': {
     transition: 'all 0.4s ease-in-out',
     '&:hover': {
@@ -179,6 +184,17 @@ const Products = () => {
             textTransform: 'uppercase',
             letterSpacing: '3px',
             textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
+            fontSize: {
+              xs: '2rem',
+              sm: '2.5rem',
+              md: '3rem',
+              lg: '3.5rem'
+            },
+            lineHeight: {
+              xs: 1.2,
+              sm: 1.3,
+              md: 1.4
+            }
           }}
         >
           Our PVC Panels Collection
@@ -192,6 +208,15 @@ const Products = () => {
             color: '#34495e',
             fontWeight: 400,
             lineHeight: 1.6,
+            fontSize: {
+              xs: '1rem',
+              sm: '1.25rem',
+              md: '1.5rem'
+            },
+            padding: {
+              xs: '0 1rem',
+              sm: '0 2rem'
+            }
           }}
         >
           Discover our wide range of beautiful and durable PVC panels. 
@@ -199,9 +224,21 @@ const Products = () => {
         </Typography>
       </TitleBox>
 
-      <ProductsGrid container spacing={4}>
+      <ProductsGrid container spacing={{ xs: 2, sm: 3, md: 4 }}>
         {products.map((product) => (
-          <Grid item key={product.id} xs={12} sm={6} md={4}>
+          <Grid 
+            item 
+            key={product.id} 
+            xs={12} 
+            sm={6} 
+            md={4} 
+            lg={3}
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'stretch'
+            }}
+          >
             <ProductCard product={product} />
           </Grid>
         ))}
