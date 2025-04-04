@@ -6,7 +6,8 @@ import {
   Typography,
   Box,
   Rating,
-  styled
+  styled,
+  CardActionArea
 } from '@mui/material';
 
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -33,97 +34,99 @@ const StyledCard = styled(Card)(({ theme }) => ({
   },
 }));
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, onClick }) => {
   return (
     <StyledCard>
-      <CardMedia
-        component="img"
-        sx={{
-          height: {
-            xs: '200px',
-            sm: '250px',
-            md: '300px'
-          },
-          objectFit: 'cover',
-          transition: 'transform 0.3s ease-in-out',
-          '&:hover': {
-            transform: 'scale(1.05)',
-          },
-        }}
-        image={product.image}
-        alt={product.name}
-      />
-      <CardContent sx={{ 
-        flexGrow: 1, 
-        p: {
-          xs: 1.5,
-          sm: 2
-        },
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between'
-      }}>
-        <Typography 
-          gutterBottom 
-          variant="h6" 
-          component="h2" 
-          sx={{ 
-            fontWeight: 600,
-            color: '#2c3e50',
-            mb: 1,
-            fontSize: {
-              xs: '1rem',
-              sm: '1.1rem',
-              md: '1.2rem'
+      <CardActionArea onClick={() => onClick(product)}>
+        <CardMedia
+          component="img"
+          sx={{
+            height: {
+              xs: '200px',
+              sm: '250px',
+              md: '300px'
             },
-            lineHeight: {
-              xs: 1.3,
-              sm: 1.4
+            objectFit: 'cover',
+            transition: 'transform 0.3s ease-in-out',
+            '&:hover': {
+              transform: 'scale(1.05)',
             },
-            display: '-webkit-box',
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis'
           }}
-        >
-          {product.name}
-        </Typography>
-        <Box sx={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          mt: 'auto',
-          pt: 1
+          image={product.image}
+          alt={product.name}
+        />
+        <CardContent sx={{ 
+          flexGrow: 1, 
+          p: {
+            xs: 1.5,
+            sm: 2
+          },
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between'
         }}>
-          <Rating 
-            value={parseFloat(product.rating)} 
-            precision={0.1} 
-            readOnly 
-            size="small"
-            sx={{
-              '& .MuiRating-icon': {
-                fontSize: {
-                  xs: '1rem',
-                  sm: '1.25rem'
-                }
-              }
-            }}
-          />
           <Typography 
-            variant="body2" 
-            color="text.secondary" 
+            gutterBottom 
+            variant="h6" 
+            component="h2" 
             sx={{ 
-              ml: 1,
+              fontWeight: 600,
+              color: '#2c3e50',
+              mb: 1,
               fontSize: {
-                xs: '0.75rem',
-                sm: '0.875rem'
-              }
+                xs: '1rem',
+                sm: '1.1rem',
+                md: '1.2rem'
+              },
+              lineHeight: {
+                xs: 1.3,
+                sm: 1.4
+              },
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
             }}
           >
-            ({product.rating})
+            {product.name}
           </Typography>
-        </Box>
-      </CardContent>
+          <Box sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            mt: 'auto',
+            pt: 1
+          }}>
+            <Rating 
+              value={parseFloat(product.rating)} 
+              precision={0.1} 
+              readOnly 
+              size="small"
+              sx={{
+                '& .MuiRating-icon': {
+                  fontSize: {
+                    xs: '1rem',
+                    sm: '1.25rem'
+                  }
+                }
+              }}
+            />
+            <Typography 
+              variant="body2" 
+              color="text.secondary" 
+              sx={{ 
+                ml: 1,
+                fontSize: {
+                  xs: '0.75rem',
+                  sm: '0.875rem'
+                }
+              }}
+            >
+              ({product.rating})
+            </Typography>
+          </Box>
+        </CardContent>
+      </CardActionArea>
     </StyledCard>
   );
 };

@@ -1,9 +1,9 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/users');
+const express =require('express');
+const cors =require('cors');
+const dotenv =require('dotenv');
+const sequelize =require('./config/database');
+const authRoutes =require('./routes/auth');
+const userRoutes =require('./routes/users');
 
 // Load environment variables
 dotenv.config();
@@ -20,24 +20,15 @@ app.use(cors({
 
 app.use(express.json());
 
-// MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/panel-paradise')
+// MySQL Connection and Sync
+sequelize.sync({ alter: process.env.NODE_ENV === 'development' })
   .then(() => {
-    console.log('Connected to MongoDB');
+    console.log('Database synced successfully');
   })
   .catch((err) => {
-    console.error('MongoDB connection error:', err);
-    process.exit(1); // Exit if cannot connect to database
+    console.error('Database sync error:', err);
+    process.exit(1);
   });
-
-// Handle MongoDB connection errors after initial connection
-mongoose.connection.on('error', (err) => {
-  console.error('MongoDB connection error:', err);
-});
-
-mongoose.connection.on('disconnected', () => {
-  console.log('MongoDB disconnected');
-});
 
 // Routes
 app.use('/api/auth', authRoutes);

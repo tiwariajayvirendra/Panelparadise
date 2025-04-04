@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
+import { API_ENDPOINTS } from '../config';
 import {
   Container,
   Paper,
@@ -9,7 +11,6 @@ import {
   Box,
   Alert,
   Link as MuiLink,
-  Link,
   Divider
 } from '@mui/material';
 import { Google as GoogleIcon } from '@mui/icons-material';
@@ -24,6 +25,7 @@ const Login = () => {
     password: '',
   });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -32,28 +34,49 @@ const Login = () => {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setError('');
-
-    // Simple validation
+  const validateForm = () => {
     if (!formData.email || !formData.password) {
-      setError('Please fill in all fields');
+      setError('All fields are required');
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
       return;
     }
 
-    // For demo purposes, we'll use a simple check
-    // In a real app, you would validate against your backend
-    if (formData.email === 'demo@example.com' && formData.password === 'password') {
-      login({
-        id: 1,
-        name: 'Demo User',
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await axios.post(API_ENDPOINTS.auth.login, {
         email: formData.email,
-        role: 'user',
+        password: formData.password
       });
-      navigate('/profile');
-    } else {
-      setError('Invalid email or password');
+
+      if (response.data.success) {
+        // Store the token in localStorage
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        
+        // Update auth context with user data
+        login({
+          id: response.data.user.id,
+          name: response.data.user.username, // Changed from name to username to match backend
+          email: response.data.user.email,
+          role: 'user' // Default role since it's not in the backend response
+        });
+        
+        navigate('/profile');
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -123,8 +146,9 @@ const Login = () => {
             variant="contained"
             size="large"
             sx={{ mt: 3 }}
+            disabled={loading}
           >
-            Login
+            {loading ? 'Signing in...' : 'Sign in'}
           </Button>
         </form>
 

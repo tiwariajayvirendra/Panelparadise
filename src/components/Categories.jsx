@@ -10,39 +10,35 @@ import {
   styled
 } from '@mui/material';
 import ProductCard from './ProductCard';
+import CardViewer from './CardViewer';
 
 // Import all product images
-import product1 from '../Assets/product-46.jpg';
-import product2 from '../Assets/product-33.jpg';
-import product3 from '../Assets/product-69.webp';
-import product4 from '../Assets/product-51.jpg';
-import product5 from '../Assets/product-58.jpg';
-import product6 from '../Assets/product-62.jpg';
-import product7 from '../Assets/product-35.jpg';
-import product8 from '../Assets/product-24.jpg';
-import product9 from '../Assets/product-18.jpg';
-import product10 from '../Assets/product-28.jpg';
-import product11 from '../Assets/product-19.jpg';
-import product12 from '../Assets/product-55.jpg';
-import product13 from '../Assets/product-25.jpg';
-import product14 from '../Assets/product-44.jpg';
-import product15 from '../Assets/product-59.jpg';
-import product16 from '../Assets/product-38.jpg';
-import product17 from '../Assets/product-31.jpg';
-import product18 from '../Assets/product-49.jpg';
-import product19 from '../Assets/product-17.jpg';
-import product20 from '../Assets/product-34.jpg';
+const productImages = {
+  product1: new URL('../Assets/product-46.jpg', import.meta.url).href,
+  product2: new URL('../Assets/product-33.jpg', import.meta.url).href,
+  product3: new URL('../Assets/product-69.webp', import.meta.url).href,
+  product4: new URL('../Assets/product-51.jpg', import.meta.url).href,
+  product5: new URL('../Assets/product-58.jpg', import.meta.url).href,
+  product6: new URL('../Assets/product-62.jpg', import.meta.url).href,
+  product7: new URL('../Assets/product-35.jpg', import.meta.url).href,
+  product8: new URL('../Assets/product-24.jpg', import.meta.url).href,
+  product9: new URL('../Assets/product-18.jpg', import.meta.url).href,
+  product10: new URL('../Assets/product-28.jpg', import.meta.url).href,
+  product11: new URL('../Assets/product-19.jpg', import.meta.url).href,
+  product12: new URL('../Assets/product-55.jpg', import.meta.url).href,
+  product13: new URL('../Assets/product-25.jpg', import.meta.url).href,
+  product14: new URL('../Assets/product-44.jpg', import.meta.url).href,
+  product15: new URL('../Assets/product-59.jpg', import.meta.url).href,
+  product16: new URL('../Assets/product-38.jpg', import.meta.url).href,
+  product17: new URL('../Assets/product-31.jpg', import.meta.url).href,
+  product18: new URL('../Assets/product-49.jpg', import.meta.url).href,
+  product19: new URL('../Assets/product-17.jpg', import.meta.url).href,
+  product20: new URL('../Assets/product-34.jpg', import.meta.url).href,
+};
 
 // Create arrays of images for each category
-const residentialImages = [
-  product1, product2, product3, product4, product5, product6, product7, product8, product9, product10,
-  product11, product12, product13, product14, product15, product16, product17, product18, product19, product20
-];
-
-const commercialImages = [
-  product1, product2, product3, product4, product5, product6, product7, product8, product9, product10,
-  product11, product12, product13, product14, product15, product16, product17, product18, product19, product20
-];
+const residentialImages = Object.values(productImages);
+const commercialImages = Object.values(productImages);
 
 // Generate sample products for each category
 const generateCategoryProducts = (category, images) => {
@@ -84,9 +80,21 @@ const Categories = () => {
   const [currentTab, setCurrentTab] = useState(0);
   const [commercialProducts] = useState(generateCategoryProducts('commercial', commercialImages));
   const [residentialProducts] = useState(generateCategoryProducts('residential', residentialImages));
+  const [selectedCard, setSelectedCard] = useState(null);
+  const [viewerOpen, setViewerOpen] = useState(false);
 
   const handleTabChange = (event, newValue) => {
     setCurrentTab(newValue);
+  };
+
+  const handleCardClick = (card) => {
+    setSelectedCard(card);
+    setViewerOpen(true);
+  };
+
+  const handleCloseViewer = () => {
+    setViewerOpen(false);
+    setSelectedCard(null);
   };
 
   const renderCategoryContent = (products, title, description) => (
@@ -109,7 +117,7 @@ const Categories = () => {
       <Grid container spacing={3}>
         {products.map((product) => (
           <Grid item key={product.id} xs={12} sm={6} md={3}>
-            <ProductCard product={product} />
+            <ProductCard product={product} onClick={handleCardClick} />
           </Grid>
         ))}
       </Grid>
@@ -117,59 +125,69 @@ const Categories = () => {
   );
 
   return (
-    <Box sx={{ 
-      width: '100%', 
-      minHeight: '100vh',
-      backgroundColor: '#f5f5f5',
-      pt: 8 // Add padding top to account for navbar
-    }}>
-      <Container maxWidth="xl">
-        <Box sx={{ 
-          borderBottom: 1, 
-          borderColor: 'divider', 
-          mb: 4,
-          backgroundColor: 'white',
-          position: 'sticky',
-          top: 64,
-          zIndex: 1,
-          py: 2,
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-        }}>
-          <Tabs
-            value={currentTab}
-            onChange={handleTabChange}
-            centered
-            textColor="primary"
-            indicatorColor="primary"
-            sx={{
-              '& .MuiTab-root': {
-                fontSize: '1.1rem',
-                fontWeight: 500,
-                minWidth: 120,
-                textTransform: 'none'
-              }
-            }}
-          >
-            <Tab label="Commercial" />
-            <Tab label="Residential" />
-          </Tabs>
-        </Box>
+    <>
+      <Box sx={{ 
+        width: '100%', 
+        minHeight: '100vh',
+        backgroundColor: '#f5f5f5',
+        pt: 8 // Add padding top to account for navbar
+      }}>
+        <Container maxWidth="xl">
+          <Box sx={{ 
+            borderBottom: 1, 
+            borderColor: 'divider', 
+            mb: 4,
+            backgroundColor: 'white',
+            position: 'sticky',
+            top: 64,
+            zIndex: 1,
+            py: 2,
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+          }}>
+            <Tabs
+              value={currentTab}
+              onChange={handleTabChange}
+              centered
+              textColor="primary"
+              indicatorColor="primary"
+              sx={{
+                '& .MuiTab-root': {
+                  fontSize: '1.1rem',
+                  fontWeight: 500,
+                  minWidth: 120,
+                  textTransform: 'none'
+                }
+              }}
+            >
+              <Tab label="Commercial" />
+              <Tab label="Residential" />
+            </Tabs>
+          </Box>
 
-        <Box sx={{ mt: 4, pb: 6 }}>
-          {currentTab === 0 && renderCategoryContent(
-            commercialProducts,
-            "Commercial Solutions",
-            "Professional grade products for your business needs"
-          )}
-          
-          {currentTab === 1 && renderCategoryContent(
-            residentialProducts,
-            "Residential Collection",
-            "Transform your home with our curated selection"
-          )}
-        </Box>
-      </Container>
-    </Box>
+          <Box sx={{ mt: 4, pb: 6 }}>
+            {currentTab === 0 && renderCategoryContent(
+              commercialProducts,
+              "Commercial Solutions",
+              "Professional grade products for your business needs"
+            )}
+            
+            {currentTab === 1 && renderCategoryContent(
+              residentialProducts,
+              "Residential Collection",
+              "Transform your home with our curated selection"
+            )}
+          </Box>
+        </Container>
+      </Box>
+
+      <CardViewer
+        open={viewerOpen}
+        onClose={handleCloseViewer}
+        card={selectedCard}
+        allCards={currentTab === 0 ? commercialProducts : residentialProducts}
+        category={currentTab === 0 ? "commercial" : "residential"}
+      />
+    </>
   );
 };
 

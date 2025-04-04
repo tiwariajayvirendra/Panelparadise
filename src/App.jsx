@@ -9,10 +9,12 @@ import ProductGrid from './components/ProductGrid'
 import Products from './components/Products'
 import Categories from './components/Categories'
 import Login from './components/Login'
+import Register from './components/Register'
 import Profile from './components/Profile'
 import About from './components/About'
 import Footer from './components/Footer'
 import './App.css'
+ 
 
 const theme = createTheme({
   palette: {
@@ -66,6 +68,7 @@ function App() {
                 <Route path="/products" element={<Products />} />
                 <Route path="/categories" element={<Categories />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/about" element={<About />} />
               </Routes>

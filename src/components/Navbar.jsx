@@ -139,7 +139,7 @@ const Navbar = () => {
         },
       }}
     >
-      <Container maxWidth="xl">
+      <Container maxWidth="x1">
         <Toolbar disableGutters>
           <Typography
             variant="h6"
